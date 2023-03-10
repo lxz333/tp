@@ -10,9 +10,11 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.person.PersonComparatorByName;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -101,6 +103,7 @@ public class ModelManager implements Model {
     @Override
     public void deletePerson(Person target) {
         addressBook.removePerson(target);
+        updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override
@@ -139,7 +142,7 @@ public class ModelManager implements Model {
         requireNonNull(predicate);
         persons.setAll(addressBook.getPersonList());
         filteredPersons.setPredicate(predicate);
-        persons.setAll(filteredPersonsByName);
+        persons.setAll(new SortedList<>(filteredPersons, new PersonComparatorByName()));
     }
 
     @Override
